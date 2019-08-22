@@ -11,7 +11,9 @@ import kotlin.math.min
 
 class VolumeKnob(context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val outerCircle = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val innerCircle = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val knob = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var startX: Float = 0f
     private var startY: Float = 0f
@@ -37,10 +39,20 @@ class VolumeKnob(context: Context?, attrs: AttributeSet?) : View(context, attrs)
     }
 
     override fun onDraw(canvas: Canvas?) {
+        val cX: Float = (width / 2f)
+        val cY: Float = (height / 2f)
 
-        paint.color = Color.CYAN
+        outerCircle.color = Color.BLACK
 
-        canvas?.drawCircle((width / 2f), (height / 2f), min((width / 2f), (height / 2f)), paint)
+        innerCircle.color = Color.GREEN
+        innerCircle.style = Paint.Style.STROKE
+        innerCircle.strokeWidth = 4f
+
+        knob.color = Color.RED
+
+        canvas?.drawCircle(cX, cY, min(cX, cY) * 0.8f, outerCircle)
+        canvas?.drawCircle(cX, cY, min(cX, cY) * 0.7f, innerCircle)
+        canvas?.drawCircle(cX - 370, cY, min(cX, cY) * 0.09f, knob)
         super.onDraw(canvas)
     }
 }
