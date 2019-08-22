@@ -1,7 +1,8 @@
-package com.rybarstudios.volumecontrol
+package com.rybarstudios.volumecontrol.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.rybarstudios.volumecontrol.R
 
 class MainActivity : AppCompatActivity() {
 
