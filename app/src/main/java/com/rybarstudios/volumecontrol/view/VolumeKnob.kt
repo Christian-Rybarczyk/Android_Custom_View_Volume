@@ -7,7 +7,13 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import kotlin.math.min
+import java.lang.Math.min
+
+
+
+private const val MIN_ROTATION = 0f
+private const val MAX_ROTATION = 270f
+private const val ROTATION_FACTOR = 95
 
 class VolumeKnob(context: Context?, attrs: AttributeSet?) : View(context, attrs){
 
@@ -16,29 +22,35 @@ class VolumeKnob(context: Context?, attrs: AttributeSet?) : View(context, attrs)
     private val knob = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var startX: Float = 0f
-    private var startY: Float = 0f
     private var diffX: Float = 0f
-    private var diffY: Float = 0f
+    private var circleRotation: Float = 0f
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
-                startY = event.y
-            }
-            MotionEvent.ACTION_UP -> {
-                /*diffX = event.x - startX
-                diffY = event.y - startY*/
             }
             MotionEvent.ACTION_MOVE -> {
+                diffX = (event.x - startX) / ROTATION_FACTOR
+                circleRotation += diffX
+
+                if (circleRotation < MIN_ROTATION) {
+                    circleRotation = MIN_ROTATION
+                }
+                if (circleRotation > MAX_ROTATION) {
+                    circleRotation = MAX_ROTATION
+                }
+                invalidate()
+                }
+            MotionEvent.ACTION_UP -> {
 
             }
         }
-        invalidate()
         return true
     }
 
     override fun onDraw(canvas: Canvas?) {
+
         val cX: Float = (width / 2f)
         val cY: Float = (height / 2f)
 
@@ -50,9 +62,13 @@ class VolumeKnob(context: Context?, attrs: AttributeSet?) : View(context, attrs)
 
         knob.color = Color.RED
 
+        canvas?.rotate(circleRotation, cX, cY)
+
+        canvas?.rotate(rotation, cX, cY)
         canvas?.drawCircle(cX, cY, min(cX, cY) * 0.8f, outerCircle)
         canvas?.drawCircle(cX, cY, min(cX, cY) * 0.7f, innerCircle)
-        canvas?.drawCircle(cX - 370, cY, min(cX, cY) * 0.09f, knob)
+        canvas?.drawCircle(cX - 260, cY + 270, min(cX, cY) * 0.08f, knob)
+
         super.onDraw(canvas)
     }
 }
